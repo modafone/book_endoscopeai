@@ -1,1 +1,1 @@
-ここにNon-polyp samplesの画像ファイルまたはフォルダを置いてください．
+Non-polyp samplesの画像ファイルまたはフォルダを格納する場所です．

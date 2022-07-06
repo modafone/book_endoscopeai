@@ -90,6 +90,8 @@ label_all = np.append(label0, label1)
 filename_all = filenames_image0 + filenames_image1
 
 # training用とtest用に8:2の割合でランダムにデータを分割する．indexはランダム分割後にファイル名を参照するために使う．
+# 注意：ここで行うランダム分割は，同一症例の画像がtraining用とtest用の両方に含まれてしまうという問題がある．同一症例の画像で学習し評価する状態となり，評価において実際の分類性能より高い精度が出てしまう．
+# 研究開発で使用する際は，同一症例の画像がtraining用とtest用の両方に含まれないような分割を行う必要がある．
 indices = np.array(range(image_all.shape[0]))
 image_train, image_test, label_train, label_test, index_train, index_test = train_test_split(image_all, label_all, indices, test_size=0.2)
 

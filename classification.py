@@ -71,9 +71,9 @@ def load_images(inputpath, imagesize, type_color):
 
 
 #%%
+### データ準備 ###
 print('*** Loading images ***')
 
-# データ準備
 # 画像読み込みとラベル値作成
 # クラス0
 image0, filenames_image0 = load_images('./sundatabase_negative/', IMAGESIZE, 'Color')
@@ -111,9 +111,11 @@ print('Loaded images: ' + repr(image_train.shape[0]) + ' for training and ' + re
 
 
 #%%
+### 画像分類モデル定義と学習処理の実行 ###
 print('*** Training ***')
 
 # 分類モデル定義
+# 基本的な分類CNN
 def classification_model():
     input_img = Input(shape=(IMAGESIZE, IMAGESIZE, 3))
 
@@ -142,8 +144,43 @@ def classification_model():
     
     return model
 
+# 層の数を増やした分類CNN
+def classification_model_deep1():
+    input_img = Input(shape=(IMAGESIZE, IMAGESIZE, 3))
 
+    x = Conv2D(filters=32, kernel_size=3, strides=1, padding='same')(input_img)
+    x = Activation('relu')(x)
+    x = MaxPooling2D(pool_size=4, strides=4)(x)
+
+    x = Conv2D(filters=64, kernel_size=3, strides=1, padding='same')(x)
+    x = Activation('relu')(x)
+    x = MaxPooling2D(pool_size=4, strides=4)(x)
+
+    x = Conv2D(filters=128, kernel_size=3, strides=1, padding='same')(x)
+    x = Activation('relu')(x)
+    x = MaxPooling2D(pool_size=4, strides=4)(x)
+
+    x = Flatten()(x)
+
+    x = Dense(100)(x)
+    x = Activation('relu')(x)
+    x = Dropout(0.5)(x)
+
+    x = Dense(10)(x)
+    x = Activation('relu')(x)
+    x = Dropout(0.5)(x)
+
+    x = Dense(2)(x)
+    x = Activation('softmax')(x)
+    
+    model = Model(inputs=input_img, outputs=x)
+    
+    return model
+
+
+# 分類モデル定義関数を呼び出す
 model = classification_model()
+#model = classification_model_deep1()   #層の数を増やしたCNNを呼び出す場合はこちらを有効化する．上の行はコメントアウトする．
 
 # モデルを表示
 print(model.summary())
@@ -156,6 +193,7 @@ training = model.fit(image_train, label_train_binary, epochs=3, batch_size=2, ve
 
 
 # %%
+### 学習済みモデルの評価 ###
 print('*** Testing ***')
 
 # testデータの分類精度を表示

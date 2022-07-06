@@ -23,7 +23,7 @@ tensorflow.config.set_visible_devices(physical_devices[gpu_id], 'GPU')
 tensorflow.config.experimental.set_memory_growth(physical_devices[gpu_id], True)    #必要な分だけGPUメモリを使用する
 
 
-IMAGESIZE = 64
+IMAGESIZE = 64  #読み込んだ画像は(IMAGESIZE,IMAGESIZE)のサイズにリサイズする
 
 # ディレクトリ内の画像を読み込む
 # inputpath: ディレクトリ文字列, imagesize: 画像サイズ, type_color: ColorかGray
